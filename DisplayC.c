@@ -33,7 +33,7 @@ ssd1306_t ssd; // Inicializa a estrutura do display
 
 int numero_matriz;
 // numeros na matriz de led
-double numero[10][25] = {
+double numero[11][25] = {
     {1.0, 1.0, 1.0, 1.0, 1.0,
      1.0, 0.0, 0.0, 0.0, 1.0,
      1.0, 0.0, 0.0, 0.0, 1.0,
@@ -92,7 +92,13 @@ double numero[10][25] = {
      1.0, 0.0, 0.0, 0.0, 1.0,
      1.0, 1.0, 1.0, 1.0, 1.0,
      1.0, 0.0, 0.0, 0.0, 0.0,
-     1.0, 1.0, 1.0, 1.0, 1.0} // 9
+     1.0, 1.0, 1.0, 1.0, 1.0}, // 9
+
+    {0.0, 0.0, 0.0, 0.0, 0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0} // apagado
 };
 
 bool debounce()
@@ -136,7 +142,6 @@ void botao_A_callback(uint gpio, uint32_t eventos)
     ssd1306_draw_string(&ssd, "LED Verde OFF", 0, 0);
     ssd1306_send_data(&ssd); // Atualiza o display
   }
- 
 }
 
 bool flagB = true;
@@ -172,9 +177,9 @@ void botao_B_callback(uint gpio, uint32_t eventos)
 uint32_t matrix_rgb(double r, double g, double b)
 {
   unsigned char R, G, B;
-  R = r * 10;
-  G = g * 10;
-  B = b * 10;
+  R = r * 30;
+  G = g * 30;
+  B = b * 30;
   return (G << 24) | (R << 16) | (B << 8);
 }
 
@@ -192,7 +197,7 @@ void gpio_callback(uint gpio, uint32_t events)
 
 int main()
 {
-  numero_matriz = 0;
+  numero_matriz = 10;
 
   PIO pio = pio0;
   bool ok;
@@ -309,6 +314,9 @@ int main()
       break;
     case '9':
       numero_matriz = 9;
+      break;
+    case '[':
+      numero_matriz = 10;
       break;
     default:
       break;
